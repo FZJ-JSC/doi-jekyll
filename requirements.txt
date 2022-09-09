@@ -1,0 +1,6 @@
+dateparser
+python_frontmatter
+PyYAML
+requests
+setuptools
+xmltodict
