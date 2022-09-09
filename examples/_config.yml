@@ -1,0 +1,25 @@
+title: DOI Jekyll Example Blog
+description: This is an example blog
+url: "https://my-site.jekyll.org/"
+
+collections:
+  authors:
+    output: true
+defaults:
+  - scope:
+      path: ""
+      type: "authors"
+    values:
+      layout: "author"
+      mathjax: true
+
+doi_jekyll:
+  publisher: 'DOI Jekyll Blog'
+  affiliation:
+    '@affiliationIdentifier': https://ror.org/032q98j12
+    "@affiliationIdentifierScheme": "ROR"
+    "@schemeURI": "https://ror.org"
+    "#text": "Wikimedia Foundation"
+  provider_url: 'https://mds.test.datacite.org'
+  suffix_base: 'doijekyll'
+  prefix: '18.10213'
