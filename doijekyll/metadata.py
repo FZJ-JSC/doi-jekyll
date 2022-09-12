@@ -133,7 +133,13 @@ def getMdDescriptions(data_post):
                 }
             }
         }
-def assembleMetadata(data_blog, data_post, data_author) -> dict:
+def addAdditionalMetadata(additional_metadata):
+	if additional_metadata:
+		logging.info(f'Add additional meatadata {additional_metadata}')
+		return additional_metadata
+	else:
+		return {}
+def assembleMetadata(data_blog, data_post, data_author, additional_metadata) -> dict:
     """
     Generate dictionary to be uploaded as metadata to DataCite.
     All level 1 keys (with 'resource' being considered as level 0) are generated in dedicated functions and merged into the internal `data` dictionary.
@@ -153,6 +159,7 @@ def assembleMetadata(data_blog, data_post, data_author) -> dict:
     data |= getMdRightsList(data_post=data_post)
     data |= getMdSubjects(data_post=data_post)
     data |= getMdDescriptions(data_post=data_post)
+    data |= addAdditionalMetadata(additional_metadata=additional_metadata)
     return {
         'resource': data
     }

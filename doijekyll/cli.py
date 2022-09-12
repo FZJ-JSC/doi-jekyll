@@ -3,6 +3,7 @@
 # Author: Andreas Herten, 2022
 import os
 import argparse
+import json
 
 class CustomRawDescriptionArgumentDefaultsHelpFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
     pass
@@ -24,6 +25,7 @@ Examples:
     parser.add_argument('-ad', '--authors-dir', help='Directory with Author Markdown file with YAML Frontmatter', default='_authors')
     parser.add_argument('-af', '--author-file', help='Markdown file with YAML Frontmatter')
     parser.add_argument('-f', '--force', help='Overwrite existing DOI in blogpost', action='store_true')
+    parser.add_argument('--additional-metadata', type=json.loads, help='BETA: Add additional metadata to DataCite payload. Will be parsed through JSON.loads and needs to be in form of \'{"key": "value"}\' (exactly these type of quotes).')
     parser.add_argument('-u', '--user', help='Username for DataCite. Can also be given by $DJ_DATACITE_USER, CLI takes precedence.', default=os.environ.get('DJ_DATACITE_USER', default=os.environ.get('DATACITE_USER', None)))
     parser.add_argument('-p', '--password', help='Password for DataCite. Can also be given by $DJ_DATACITE_PASSWORD, CLI takes precedence.', default=os.environ.get('DJ_DATACITE_PASSWORD', default=os.environ.get('DATACITE_PASSWORD', None)))
     parser.add_argument('--skip-url', help="Don't register URL for entry", action='store_true')

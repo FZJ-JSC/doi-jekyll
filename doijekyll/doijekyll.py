@@ -142,8 +142,8 @@ def main():
     Logging is available on different levels.
     """
     args = cli.parseArguments()
-    logging.debug(f'argparse arguments: {args}')
     setLogging(args)
+    logging.debug(f'Argparse arguments: {args}')
     dc_user, dc_password = parseCredentials(args.user, args.password)
     logging.debug(f'Using DataCite user ..{dc_user[2:-4]}.. and password ..{dc_password[3:-6]}...')
 
@@ -159,7 +159,7 @@ def main():
     raw_data_post['doi'] = genDoi(title=raw_data_post['title'], base=raw_data_blog['suffix_base'], prefix=raw_data_blog['prefix'])
     logging.debug(f"Auto-generated DOI {raw_data_post['doi']}")
 
-    dj_data_json = metadata.assembleMetadata(data_blog=raw_data_blog, data_post=raw_data_post, data_author=raw_data_author)
+    dj_data_json = metadata.assembleMetadata(data_blog=raw_data_blog, data_post=raw_data_post, data_author=raw_data_author, additional_metadata=args.additional_metadata)
     logging.debug(f"Metadata JSON:\n{json.dumps(dj_data_json, indent=4)}")
 
     dj_data_xml = xmltodict.unparse(dj_data_json)
