@@ -1,5 +1,7 @@
 # doi-jekyll: Create DOIs for Jekyll Blog Posts
 
+[![DOI](https://zenodo.org/badge/534798824.svg)](https://zenodo.org/badge/latestdoi/534798824)
+
 `doi-jekyll` is a small Python tool to collect metadata of a Jekyll blog post and submit it to [DataCite Fabrica](https://doi.datacite.org/), minting a DOI for it. It is made for the [X-Dev Lab blog](https://x-dev.pages.jsc.fz-juelich.de/), but should work for any Jekyll-based blog (see `examples/` directory).
 
 For a given blog post, the tool collects the metadata of the post, some metadata from the blog itself, and data from the author. It packages everything together in a dictionary following DataCite's Metadata Schema, converts it to XML (dicts are just much easier in Python), registers it with DataCite through the MDS API, and finally mints a DOI for it.
