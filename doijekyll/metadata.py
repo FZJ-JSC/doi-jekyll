@@ -4,7 +4,23 @@
 import logging
 
 import dateparser
+from mergedeep import merge
 
+class extDict(dict):
+    """This class extends the dict() method for the
+    &
+    &=
+    operators (like | and |=), to add deepmerge functionality of `mergedeep`.
+    It is currently not used as I fear reduced clarity.
+    """
+    def __init__(self, *args, **kwargs):
+        super(extDict, self).__init__(*args, **kwargs)
+    def __and__(self, other):
+        return merge({}, self, other)
+    def __rand__(self, other):
+        return merge({}, other, self)
+    def __iand__(self, other):
+        return merge(self, other)
 def parseLicense(data_post) -> dict:
     """
     Take a license short-name ('mit') and make the SPDX proper identifier form it, including an URL.
@@ -135,7 +151,7 @@ def getMdDescriptions(data_post):
         }
 def getMdRelToBlog(data_blog):
     if 'doi' in data_blog:
-        logging.info(f'METADATA: Adding relation to entire blog with DOI {data_blog["doi"]}.')
+        logging.info(f'METADATA: Add relation to entire blog with DOI {data_blog["doi"]}.')
         return {
             'relatedIdentifiers': {
                 'relatedIdentifier': {
@@ -148,11 +164,11 @@ def getMdRelToBlog(data_blog):
     else:
         return {}
 def addAdditionalMetadata(additional_metadata):
-	if additional_metadata:
-		logging.info(f'Add additional meatadata {additional_metadata}')
-		return additional_metadata
-	else:
-		return {}
+    if additional_metadata:
+        logging.info(f'METADATA: Add additional metadata {additional_metadata}')
+        return additional_metadata
+    else:
+        return {}
 def assembleMetadata(data_blog, data_post, data_author, additional_metadata) -> dict:
     """
     Generate dictionary to be uploaded as metadata to DataCite.
@@ -174,7 +190,9 @@ def assembleMetadata(data_blog, data_post, data_author, additional_metadata) -> 
     data |= getMdSubjects(data_post=data_post)
     data |= getMdDescriptions(data_post=data_post)
     data |= getMdRelToBlog(data_blog=data_blog)
-    data |= addAdditionalMetadata(additional_metadata=additional_metadata)
+    merge(data, addAdditionalMetadata(additional_metadata=additional_metadata))
+    if 'doi-additional-metadata' in data_post:
+        merge(data, addAdditionalMetadata(additional_metadata=data_post['doi-additional-metadata']))
     return {
         'resource': data
     }
