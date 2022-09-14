@@ -12,7 +12,7 @@ def parseLicense(data_post) -> dict:
     """
     # could be extended via https://github.com/nexB/license-expression maybe
     if 'license' not in data_post:
-        logging.warning(f'Note: No license specified!')
+        logging.warning(f'METADATA: No license specified!')
         return None
     else:
         match data_post['license'].lower():
@@ -122,7 +122,7 @@ def getMdSubjects(data_post):
     }
 def getMdDescriptions(data_post):
     if 'abstract' not in data_post:
-        print(f'Note: No abstract given!')
+        print(f'METADATA: Note, no abstract given!')
         return {}
     else:
         return {
@@ -133,6 +133,20 @@ def getMdDescriptions(data_post):
                 }
             }
         }
+def getMdRelToBlog(data_blog):
+    if 'doi' in data_blog:
+        logging.info(f'METADATA: Adding relation to entire blog with DOI {data_blog["doi"]}.')
+        return {
+            'relatedIdentifiers': {
+                'relatedIdentifier': {
+                    '@relatedIdentifierType': 'DOI',
+                    '@relationType': 'IsPartOf',
+                    '#text': data_blog['doi']
+                }
+            }
+        }
+    else:
+        return {}
 def addAdditionalMetadata(additional_metadata):
 	if additional_metadata:
 		logging.info(f'Add additional meatadata {additional_metadata}')
@@ -159,6 +173,7 @@ def assembleMetadata(data_blog, data_post, data_author, additional_metadata) -> 
     data |= getMdRightsList(data_post=data_post)
     data |= getMdSubjects(data_post=data_post)
     data |= getMdDescriptions(data_post=data_post)
+    data |= getMdRelToBlog(data_blog=data_blog)
     data |= addAdditionalMetadata(additional_metadata=additional_metadata)
     return {
         'resource': data

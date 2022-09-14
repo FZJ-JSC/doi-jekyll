@@ -23,3 +23,4 @@ doi_jekyll:
   provider_url: 'https://mds.test.datacite.org'
   suffix_base: 'doijekyll'
   prefix: '18.10213'
+  doi: '18.10213/blog.base'

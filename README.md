@@ -28,7 +28,7 @@ doi-jekyll _posts/2022-09-12-my-blogpost.md
 Quite certainly, your Jekyll installation needs to be adapted.
 
 * The blog post needs to contain some metadata in the YAML frontmatter for the DOI metadata, like `title`, `date`, `author`, `author`. And optionally `tags`, `license`, `abstract`
-* The blog-wide Jekyll config, `_config.yml`, is located in the root of the blog. It also needs to contain blog-wide metadata, like `publisher`, `affiliation`, `provider_url`, `suffix_base`, `prefix` and optionally `blog_doi`. All these keys need to be part of the `doi_jekyll` first-level key.
+* The blog-wide Jekyll config, `_config.yml`, is located in the root of the blog. It also needs to contain blog-wide metadata, like `publisher`, `affiliation`, `provider_url`, `suffix_base`, `prefix` and optionally `doi` (for the DOI of the blog itself, will be a relational _parent_ (`isPartOf`) to the posts). All these keys need to be part of the `doi_jekyll` first-level key.
 * A file for the author needs to exist with metadata like `name`, `firstname`, `lastname`, and `orcid_id`. The author file is automatically searched for in the `_authors/` directory (using the blog post's `author`), but can also be given via command line.
 
 In addition, credentials to login to DataCite need to be given either via command line (`--user`, `--password`) or via environment variables (see `.env.sample.sh`). I recommend using the DataCite Test instance for testing by setting the according url as `provider_url` in `_config.yml`
