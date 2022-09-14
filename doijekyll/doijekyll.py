@@ -92,12 +92,11 @@ def genPermalink(data_blog, post_filename, data_post):
     post_date_formatted = post_date_raw.strftime('%Y/%m/%d')
     post_filename_base = PurePath(post_filename).stem
     post_filename_matched = re.search(regex_filename, post_filename_base)
-    post_filename_clean = 'asf'
-    # if post_filename_matched is None:
-    #     logger.error(f'Can not create URL from Markdown file.')
-    #     sys.exit()
-    # else:
-    #     post_filename_clean = post_filename_matched.group(2)
+    if post_filename_matched is None:
+        logger.error(f'PERMALINK: Can not create URL from Markdown file.')
+        sys.exit()
+    else:
+        post_filename_clean = post_filename_matched.group(2)
     return f'{url_base}/{post_date_formatted}/{post_filename_clean}.html'
 def registerUrl(data_blog, post_filename, data_post, doi, user, password):
     """
@@ -171,7 +170,7 @@ def main():
         dj_regMd_result = registerMetadata(data_blog=raw_data_blog, dj_data_xml=dj_data_xml, doi=raw_data_post['doi'], user=dc_user, password=dc_password)
         logging.debug(dj_regMd_result.text)
         logging.debug(dj_regMd_result.headers)
-        if not debug.ok:
+        if not dj_regMd_result.ok:
             logging.error('Something went wrong registering Metadata')
             logging.warning(dj_regMd_result.text)
             logging.warning(dj_regMd_result.headers)
