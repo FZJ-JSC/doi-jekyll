@@ -1,0 +1,21 @@
+{
+    "creators": [
+        {   
+            "orcid": "0000-0002-7150-2505",
+            "affiliation": "Jülich Supercomputing Centre",
+            "name": "Herten, Andreas"
+        }
+    ],    
+
+    "title": "doi-jekyll: DOIs for Jekyll Blog Posts",
+
+    "publication_date": "2022-09-14",
+
+    "description": "doi-jekyll is a small Python tool to collect metadata of a Jekyll blog post and submit it to DataCite Fabrica, minting a DOI for it. It is made for the X-Dev Lab blog, but should work for any Jekyll-based blog (see examples/ directory).",
+
+    "access_right": "open",
+    "license": "MIT",
+
+    "upload_type": "software",
+    "keywords": ["Jekyll", "DOI", "Science", "Open Science", "Web of Science", "Ruby"]
+}
