@@ -41,6 +41,9 @@ def parseLicense(data_post) -> dict:
             case 'cc-by4':
                 license='CC-BY-4.0'
                 url='https://creativecommons.org/licenses/by/4.0/'
+            case 'cc-by-sa4':
+                license='CC-BY-SA-4.0'
+                url='https://creativecommons.org/licenses/by-sa/4.0/legalcode'
             case 'gpl3':
                 license='GPL-3.0-only'
                 url='https://opensource.org/licenses/GPL-3.0'
