@@ -64,7 +64,7 @@ def genDoi(title: str, base: str, prefix: str) -> str:
     import base64
     b64 = base64.b64encode(title.encode())
     b64_short = b64[0:6]
-    return f'{prefix}/{base}-{b64_short.decode()}'
+    return f'{prefix}/{base}-{b64_short.decode().lower()}'
 def registerMetadata(data_blog, dj_data_xml, doi, user, password):
     """
     Register metadata for a DOI at DataCite.
