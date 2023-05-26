@@ -76,7 +76,7 @@ def registerMetadata(data_blog, dj_data_xml, doi, user, password):
     return requests.put(
         f'{data_blog["provider_url"]}/metadata/{doi}', 
         headers=dj_header, 
-        data=dj_data_xml, 
+        data=dj_data_xml.encode('utf-8'), 
         auth=(user, password)
     )
 def genPermalink(data_blog, post_filename, data_post):
