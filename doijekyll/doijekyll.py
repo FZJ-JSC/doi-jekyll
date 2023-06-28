@@ -44,16 +44,22 @@ def collectBlogData(file):
 def collectPostData(file):
     """Collect data from blog post file."""
     return frontmatter.loads(file.read())
-def collectAuthorData(authorname: str, args):
+def collectAuthorsData(authornames: list[str] | str, args):
     """
     Collect data from author file.
     Either directly take an author file as supplied by command line arguments, or search for `authorname` in the default/a specified directory.
     """
-    if args.author_file:
-        filename = args.author_file
-    else:
-        filename = PurePath(args.authors_dir, authorname.lower()).with_suffix('.md')
-    return frontmatter.load(filename)
+    _loaded_authors = []
+    for authorname in authornames:
+        if args.author_file:
+            if len(authornames) > 1:
+                print("Manual author file not supported for more than one author")
+                exit()
+            filename = args.author_file
+        else:
+            filename = PurePath(args.authors_dir, authorname.lower()).with_suffix('.md')
+        _loaded_authors.append(frontmatter.load(filename))
+    return _loaded_authors
 def genDoi(title: str, base: str, prefix: str) -> str:
     """
     Generate a DOI name.
@@ -150,15 +156,15 @@ def main():
     logging.debug(f'Parsed raw data from blog: {raw_data_blog}')
     raw_data_post = collectPostData(args.blogpost[0])
     logging.debug(f'Parsed raw data from post: {raw_data_post.metadata}')
-    raw_data_author = collectAuthorData(raw_data_post['author'], args)
-    logging.debug(f'Parsed raw data from author: {raw_data_author.metadata}')
+    raw_data_authors = collectAuthorsData(raw_data_post['author'], args)
+    logging.debug('Parsed raw data from author: {_author}'.format(_author=[*(str(raw_data_author.metadata) for raw_data_author in raw_data_authors)]))
 
     if 'doi' in raw_data_post and not args.force:
         sys.exit(f'DOI already exists for blog post ({raw_data_post["doi"]}). Launch with "-f" to force overwrite.')
     raw_data_post['doi'] = genDoi(title=raw_data_post['title'], base=raw_data_blog['suffix_base'], prefix=raw_data_blog['prefix'])
     logging.debug(f"Auto-generated DOI {raw_data_post['doi']}")
 
-    dj_data_json = metadata.assembleMetadata(data_blog=raw_data_blog, data_post=raw_data_post, data_author=raw_data_author, additional_metadata=args.additional_metadata)
+    dj_data_json = metadata.assembleMetadata(data_blog=raw_data_blog, data_post=raw_data_post, data_authors=raw_data_authors, additional_metadata=args.additional_metadata)
     logging.debug(f"Metadata JSON:\n{json.dumps(dj_data_json, indent=4)}")
 
     dj_data_xml = xmltodict.unparse(dj_data_json)

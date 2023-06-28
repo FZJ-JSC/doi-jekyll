@@ -70,23 +70,26 @@ def getMdIdentifier(data_post):
             '#text': data_post['doi'],
         }
     }
-def getMdCreators(data_blog, data_author):
+def getMdCreators(data_blog, data_authors):
+    _author_list = []
+    for data_author in data_authors:
+        _author_list.append({
+            'creatorName': {
+                '@nameType': 'Personal',
+                '#text': data_author['name']
+            },
+            'givenName': data_author['first_name'],
+            'familyName': data_author['last_name'],
+            'nameIdentifier': {
+                '@nameIdentifierScheme': 'ORCID',
+                '@schemeURI': 'https://orcid.org',
+                '#text': f'https://orcid.org/{data_author["orcid_id"]}'
+            },
+            'affiliation': data_blog['affiliation']
+        })
     return {
         'creators': {
-            'creator': {
-                'creatorName': {
-                    '@nameType': 'Personal',
-                    '#text': data_author['name']
-                },
-                'givenName': data_author['first_name'],
-                'familyName': data_author['last_name'],
-                'nameIdentifier': {
-                    '@nameIdentifierScheme': 'ORCID',
-                    '@schemeURI': 'https://orcid.org',
-                    '#text': f'https://orcid.org/{data_author["orcid_id"]}'
-                },
-                'affiliation': data_blog['affiliation']
-            }
+            'creator': _author_list
         }
     }
 def getMdTitles(data_post):
@@ -172,16 +175,16 @@ def addAdditionalMetadata(additional_metadata):
         return additional_metadata
     else:
         return {}
-def assembleMetadata(data_blog, data_post, data_author, additional_metadata) -> dict:
+def assembleMetadata(data_blog, data_post, data_authors, additional_metadata) -> dict:
     """
     Generate dictionary to be uploaded as metadata to DataCite.
     All level 1 keys (with 'resource' being considered as level 0) are generated in dedicated functions and merged into the internal `data` dictionary.
-    Some dedicated functions only contain static values and hence no arguments, others need global data from the blog (`data_blog`), data from the specific post (`data_post`), or data from the respective author (`data_author`)
+    Some dedicated functions only contain static values and hence no arguments, others need global data from the blog (`data_blog`), data from the specific post (`data_post`), or data from the authors (`data_authors`)
     """
     data = dict()
     data |= getMdSchema()  # this is new Python 3.9 syntax to merge two dictionaries
     data |= getMdIdentifier(data_post=data_post)
-    data |= getMdCreators(data_blog=data_blog, data_author=data_author)
+    data |= getMdCreators(data_blog=data_blog, data_authors=data_authors)
     data |= getMdTitles(data_post=data_post)
     data |= getMdPublicationYear(data_post=data_post)
     data |= getMdPublisher(data_blog=data_blog)
