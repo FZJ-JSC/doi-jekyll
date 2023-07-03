@@ -50,6 +50,7 @@ def collectAuthorsData(authornames: list[str] | str, args):
     Either directly take an author file as supplied by command line arguments, or search for `authorname` in the default/a specified directory.
     """
     _loaded_authors = []
+    authornames = [authornames] if isinstance(authornames, str) else authornames
     for authorname in authornames:
         if args.author_file:
             if len(authornames) > 1:
