@@ -69,9 +69,11 @@ def genDoi(title: str, base: str, prefix: str) -> str:
     Use the global prefix as the identifier before the slash.
     """
     import base64
-    b64 = base64.b64encode(title.encode())
-    b64_short = b64[0:6]
-    return f'{prefix}/{base}-{b64_short.decode().lower()}'
+    import hashlib
+    hsh = hashlib.sha1(title.encode()).digest()
+    b64 = base64.urlsafe_b64encode(hsh).decode()
+    b64_short = b64.rstrip('=').replace('-', '').replace('_', '').lower()[0:6]
+    return f'{prefix}/{base}-{b64_short}'
 def registerMetadata(data_blog, dj_data_xml, doi, user, password):
     """
     Register metadata for a DOI at DataCite.
